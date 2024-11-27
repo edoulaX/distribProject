@@ -1,4 +1,6 @@
-package cs451;
+package cs451.parser;
+
+import cs451.Host;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,7 +24,10 @@ public class HostsParser {
         }
 
         this.filename = filename;
+        System.out.println("before reading the hosts file");
+        System.out.println(filename);
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            System.out.println("Reading the hosts file...");
             int lineNum = 1;
             for(String line; (line = br.readLine()) != null; lineNum++) {
                 if (line.isBlank()) {

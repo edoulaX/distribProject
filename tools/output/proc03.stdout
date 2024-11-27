@@ -1,0 +1,256 @@
+before reading the hosts file
+./output/hosts
+Reading the hosts file...
+PerfectLinkConfigParser - m: 10, i: 1
+cs451.Host@737996a0Socket opened
+Binding cs451.Host@737996a0=> cs451.Host@59e84876
+cs451.Host@737996a0 Connected to cs451.Host@59e84876
+cs451.Host@737996a0Running
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0INCOMING PACKET TIMEOUT: 50ms, delta: 50ms
+cs451.Host@737996a0Receiver alive: false Failed to receive ACK for seq_nr: 1
+Waiting for a receiver
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0INCOMING PACKET TIMEOUT: 50ms, delta: 50ms
+cs451.Host@737996a0Receiver alive: false Failed to receive ACK for seq_nr: 1
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0INCOMING PACKET TIMEOUT: 50ms, delta: 50ms
+cs451.Host@737996a0Receiver alive: false Failed to receive ACK for seq_nr: 1
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0INCOMING PACKET TIMEOUT: 50ms, delta: 50ms
+cs451.Host@737996a0Receiver alive: false Failed to receive ACK for seq_nr: 1
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0INCOMING PACKET TIMEOUT: 50ms, delta: 50ms
+cs451.Host@737996a0Receiver alive: false Failed to receive ACK for seq_nr: 1
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0INCOMING PACKET TIMEOUT: 50ms, delta: 50ms
+cs451.Host@737996a0Receiver alive: false Failed to receive ACK for seq_nr: 1
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0INCOMING PACKET TIMEOUT: 50ms, delta: 50ms
+cs451.Host@737996a0Receiver alive: false Failed to receive ACK for seq_nr: 1
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=1, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=1, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=2, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=2, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=3, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=3, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=4, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=4, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=5, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=5, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=6, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=6, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=7, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=7, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=8, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=8, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=9, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=9, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0Sending packet Packet{type=b, seqNr=10, senderId=3}
+cs451.Host@737996a0Received ACK: Packet{type=a, seqNr=10, senderId=1}
+Decreasing timeout 50
+cs451.Host@737996a0 Done transmitting
+WRITING TO FILE
+[b 1, b 2, b 3, b 4, b 5, b 6, b 7, b 8, b 9, b 10]
+/home/edouard/Documents/EPFL/DistribAlgo/Project/distribProject/tools/output/proc03.output
+cs451.Host@737996a0Terminated
+Immediately stopping network packet processing.
+Writing output.

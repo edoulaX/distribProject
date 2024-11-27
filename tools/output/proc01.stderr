@@ -1,0 +1,11 @@
+java.net.SocketException: Socket closed
+	at java.base/java.net.PlainDatagramSocketImpl.receive0(Native Method)
+	at java.base/java.net.AbstractPlainDatagramSocketImpl.receive(AbstractPlainDatagramSocketImpl.java:200)
+	at java.base/java.net.DatagramSocket.receive(DatagramSocket.java:814)
+	at cs451.perfectLink.Process.getIncomingPacket(Process.java:49)
+	at cs451.perfectLink.Receiver.run(Receiver.java:41)
+	at cs451.Main.main(Main.java:50)
+Exception in thread "main" java.lang.NullPointerException
+	at cs451.packet.Packet.<init>(Packet.java:20)
+	at cs451.perfectLink.Receiver.run(Receiver.java:42)
+	at cs451.Main.main(Main.java:50)

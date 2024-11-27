@@ -1,4 +1,7 @@
-package cs451;
+package cs451.parser;
+
+import cs451.Constants;
+import cs451.Host;
 
 import java.util.List;
 
@@ -25,32 +28,33 @@ public class Parser {
 
         int argsNum = args.length;
         if (argsNum != Constants.ARG_LIMIT_CONFIG) {
-            help();
+            help( "argsNum" );
         }
 
         if (!idParser.populate(args[Constants.ID_KEY], args[Constants.ID_VALUE])) {
-            help();
+            help( "idParser - populate" );
         }
 
         if (!hostsParser.populate(args[Constants.HOSTS_KEY], args[Constants.HOSTS_VALUE])) {
-            help();
+            help( "hostsParser - populate" );
         }
 
         if (!hostsParser.inRange(idParser.getId())) {
-            help();
+            help( "hostsParser - inRange" );
         }
 
         if (!outputParser.populate(args[Constants.OUTPUT_KEY], args[Constants.OUTPUT_VALUE])) {
-            help();
+            help( "outputParser - populate" );
         }
 
         if (!configParser.populate(args[Constants.CONFIG_VALUE])) {
-            help();
+            help( "configParser - populate" );
         }
     }
 
-    private void help() {
+    private void help(String msg) {
         System.err.println("Usage: ./run.sh --id ID --hosts HOSTS --output OUTPUT CONFIG");
+        System.err.println(msg);
         System.exit(1);
     }
 
@@ -64,6 +68,10 @@ public class Parser {
 
     public String output() {
         return outputParser.getPath();
+    }
+
+    public OutputParser getOutputParser() {
+        return outputParser;
     }
 
     public String config() {
