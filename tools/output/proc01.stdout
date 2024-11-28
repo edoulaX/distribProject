@@ -1,283 +1,54 @@
-before reading the hosts file
-./output/hosts
-Reading the hosts file...
-PerfectLinkConfigParser - m: 10, i: 1
-cs451.Host@737996a0Socket opened
-cs451.Host@737996a0Running
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 1
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 2
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 3
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 4
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 5
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 6
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 7
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 8
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 9
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11002, msg: d 2 10
-cs451.Host@737996a0Sending ACK to: 11002, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 1
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 1
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 2
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 2
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 3
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 3
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 4
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 4
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 5
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 5
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 6
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 6
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 7
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 7
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 8
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 8
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 9
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 9
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-cs451.Host@737996a0Received from: 11003, msg: d 3 10
-cs451.Host@737996a0Sending ACK to: 11003, msg: a 1 10
-cs451.Host@737996a0receiver waiting...
-Immediately stopping network packet processing.
-WRITING TO FILE
-[d 2 1, d 2 2, d 2 3, d 2 4, d 2 5, d 2 6, d 2 7, d 2 8, d 2 9, d 2 10, d 3 1, d 3 2, d 3 3, d 3 4, d 3 5, d 3 6, d 3 7, d 3 8, d 3 9, d 3 10]
-/home/edouard/Documents/EPFL/DistribAlgo/Project/distribProject/tools/output/proc01.output
-cs451.Host@737996a0Terminated
-Writing output.
+Process 1 started on localhost:11001
+Process 1 is now listening for incoming messages.
+Process 1 is broadcasting 10 messages.
+Process 1 sent message 1-1 to localhost:11001
+Process 1 sent message 1-1 to localhost:11002
+Process 1 sent message 1-1 to localhost:11003
+Process 1 sent message 1-2 to localhost:11001
+Process 1 sent message 1-2 to localhost:11002
+Process 1 sent message 1-2 to localhost:11003
+Process 1 sent message 1-3 to localhost:11001
+Process 1 sent message 1-3 to localhost:11002
+Process 1 sent message 1-3 to localhost:11003
+Process 1 sent message 1-4 to localhost:11001
+Process 1 sent message 1-4 to localhost:11002
+Process 1 sent message 1-4 to localhost:11003
+Process 1 sent message 1-5 to localhost:11001
+Process 1 sent message 1-5 to localhost:11002
+Process 1 sent message 1-5 to localhost:11003
+Process 1 sent message 1-6 to localhost:11001
+Process 1 sent message 1-6 to localhost:11002
+Process 1 sent message 1-6 to localhost:11003
+Process 1 sent message 1-7 to localhost:11001
+Process 1 sent message 1-7 to localhost:11002
+Process 1 sent message 1-7 to localhost:11003
+Process 1 sent message 1-8 to localhost:11001
+Process 1 sent message 1-8 to localhost:11002
+Process 1 sent message 1-8 to localhost:11003
+Process 1 sent message 1-9 to localhost:11001
+Process 1 sent message 1-9 to localhost:11002
+Process 1 sent message 1-9 to localhost:11003
+Process 1 sent message 1-10 to localhost:11001
+Process 1 sent message 1-10 to localhost:11002
+Process 1 sent message 1-10 to localhost:11003
+Process 1 finished broadcasting.
+Process 1 sent acknowledgment for message 1-1
+Process 1 delivered message 1-1
+Process 1 sent acknowledgment for message 1-2
+Process 1 delivered message 1-2
+Process 1 sent acknowledgment for message 1-3
+Process 1 delivered message 1-3
+Process 1 sent acknowledgment for message 1-4
+Process 1 delivered message 1-4
+Process 1 sent acknowledgment for message 1-5
+Process 1 delivered message 1-5
+Process 1 sent acknowledgment for message 1-6
+Process 1 delivered message 1-6
+Process 1 sent acknowledgment for message 1-7
+Process 1 delivered message 1-7
+Process 1 sent acknowledgment for message 1-8
+Process 1 delivered message 1-8
+Process 1 sent acknowledgment for message 1-9
+Process 1 delivered message 1-9
+Process 1 sent acknowledgment for message 1-10
+Process 1 delivered message 1-10
