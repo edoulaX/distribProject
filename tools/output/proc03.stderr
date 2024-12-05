@@ -1,7 +1,0 @@
-Error in process 3 while listening: null
-java.lang.NullPointerException
-	at cs451.FIFOBuffer.getDeliverableMessages(FIFOBuffer.java:26)
-	at cs451.Process.deliverMessages(Process.java:119)
-	at cs451.Process.handleMessage(Process.java:93)
-	at cs451.Process.listen(Process.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:834)
