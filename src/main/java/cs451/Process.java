@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Process {
     private final int processId;
@@ -15,16 +14,16 @@ public class Process {
     private final FIFOBuffer fifoBuffer;
     private final NetworkSimulator networkSimulator;
     private final DatagramSocket socket;
-    private final int messageCount;
-    private final ConcurrentHashMap<String, AtomicInteger> retransmissionCounts = new ConcurrentHashMap<>();
-    private final Map<String, Long> nextRetransmissionTime = new HashMap<>();
-    private static final int MAX_RETRANSMISSIONS = 20;
-    private static final long BASE_RETRANSMISSION_INTERVAL = 1000; // 1 second in milliseconds
+    private final List<Set<Integer>> proposals;
+    private final Set<Integer> decisionSet = new HashSet<>(); // Decided values
+    private final ConcurrentHashMap<String, Integer> proposalRetries = new ConcurrentHashMap<>();
     private final BufferedWriter writer;
-    private final Timer retransmissionTimer = new Timer(true); // Single-threaded timer for retransmissions
+    private final Timer retryTimer = new Timer(true);
 
-    public Process(int processId, int totalProcesses, Host myHost, List<Host> hosts, String outputFile, int messageCount)
-            throws IOException {
+    private static final int MAX_RETRIES = 10;
+    private static final long RETRY_INTERVAL = 1000;
+
+    public Process(int processId, int totalProcesses, Host myHost, List<Host> hosts, String outputFile, List<Set<Integer>> proposals) throws IOException {
         this.processId = processId;
         this.totalProcesses = totalProcesses;
         this.myHost = myHost;
@@ -33,32 +32,27 @@ public class Process {
         this.fifoBuffer = new FIFOBuffer(totalProcesses);
         this.networkSimulator = new NetworkSimulator();
         this.socket = new DatagramSocket(myHost.getPort());
-        this.messageCount = messageCount;
+        this.proposals = proposals;
         this.writer = new BufferedWriter(new FileWriter(outputFile));
 
-        // Start retransmission checking
-        retransmissionTimer.schedule(new TimerTask() {
+        retryTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                retransmitUnacknowledged();
+                retryProposals();
             }
-        }, 0, BASE_RETRANSMISSION_INTERVAL); // Check every second
+        }, 0, RETRY_INTERVAL);
     }
 
     public void start() throws IOException {
-        //System.out.println("Process " + processId + " started on " + myHost.getAddress() + ":" + myHost.getPort());
         new Thread(this::listen).start();
 
-        //System.out.println("Process " + processId + " is broadcasting " + messageCount + " messages.");
-        for (int i = 1; i <= messageCount; i++) {
-            broadcast(i);
+        for (int i = 0; i < proposals.size(); i++) {
+            propose(proposals.get(i), i + 1);
         }
-        //System.out.println("Process " + processId + " finished broadcasting.");
     }
 
     private void listen() {
         try {
-            //System.out.println("Process " + processId + " is now listening for incoming messages.");
             while (true) {
                 byte[] buffer = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -77,97 +71,79 @@ public class Process {
         if (message.isAck()) {
             ackTracker.addAck(message.getId(), message.getSenderId());
             if (ackTracker.isFullyAcknowledged(message.getId(), totalProcesses)) {
-                ackTracker.removeMessage(message.getId());
-                retransmissionCounts.remove(message.getId());
-                nextRetransmissionTime.remove(message.getId());
-                //System.out.println("Process " + processId + " received full acknowledgment for " + message.getId());
+                decide(message);
             }
+        } else if (message.isNoAck()) {
+            ackTracker.addNoAck(message.getId(), message.getSenderId(), message.getProposalSet());
+            retryProposal(message.getId());
         } else {
-            if (fifoBuffer.isDuplicate(message)) {
-                //System.out.println("Process " + processId + " ignored duplicate message " + message.getId());
-                return;
-            }
-
             fifoBuffer.addMessage(message);
-            Message ack = Message.createAck(processId, message.getSeqNo());
             Host sender = hosts.get(message.getSenderId() - 1);
-
-            try {
-                networkSimulator.send(ack, sender.getAddress(), sender.getPort());
-                //System.out.println("Process " + processId + " sent acknowledgment for message " + message.getId());
-            } catch (Exception e) {
-                System.err.println("Error sending acknowledgment for message " + message.getId() + ": " + e.getMessage());
-                e.printStackTrace();
-            }
+            Message ack = Message.createAck(processId, message.getSeqNo());
+            networkSimulator.send(ack, sender.getAddress(), sender.getPort());
         }
-
         deliverMessages();
     }
 
-    private void broadcast(int seqNo) throws IOException {
-        Message message = new Message(processId, seqNo, "m" + seqNo, false);
-        ackTracker.addAck(message.getId(), processId);
-        ackTracker.addPendingMessage(message); // Add to pending messages
-        retransmissionCounts.putIfAbsent(message.getId(), new AtomicInteger(0));
-        nextRetransmissionTime.put(message.getId(), System.currentTimeMillis() + BASE_RETRANSMISSION_INTERVAL);
+    private void propose(Set<Integer> proposal, int seqNo) throws IOException {
+        Message message = new Message(processId, seqNo, null, false, proposal, false);
+        ackTracker.addPendingMessage(message);
+        proposalRetries.put(message.getId(), 0);
 
-        writeToOutput("b " + seqNo);
+        broadcast(message);
+    }
 
-        for (Host host : hosts) {
-            try {
-                networkSimulator.send(message, host.getAddress(), host.getPort());
-                //System.out.println("Process " + processId + " sent message " + message.getId() + " to " + host.getAddress() + ":" + host.getPort());
-            } catch (Exception e) {
-                System.err.println("Error sending message " + message.getId() + " to " + host.getAddress() + ":" + host.getPort() + ": " + e.getMessage());
+    private void retryProposal(String messageId) throws IOException {
+        Message message = ackTracker.getPendingMessage(messageId);
+        if (message == null) return;
+
+        int retries = proposalRetries.getOrDefault(messageId, 0);
+        if (retries >= MAX_RETRIES) {
+            System.err.println("Process " + processId + " reached max retries for proposal " + messageId);
+            ackTracker.removeMessage(messageId);
+            return;
+        }
+
+        Set<Integer> conflicting = ackTracker.getConflictingProposals(messageId);
+        Set<Integer> updatedProposal = new HashSet<>(message.getProposalSet());
+        updatedProposal.addAll(conflicting);
+
+        Message newMessage = new Message(processId, message.getSeqNo(), null, false, updatedProposal, false);
+        ackTracker.addPendingMessage(newMessage);
+        proposalRetries.put(newMessage.getId(), retries + 1);
+
+        broadcast(newMessage);
+    }
+
+    private void retryProposals() {
+        try {
+            for (Message message : ackTracker.getUnacknowledgedMessages(totalProcesses)) {
+                retryProposal(message.getId());
             }
+        } catch (IOException e) {
+            System.err.println("Error during proposal retries: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private void retransmitUnacknowledged() {
-        long now = System.currentTimeMillis();
-        List<Message> toRetransmit = new ArrayList<>();
-
-        // Identify messages to retransmit
-        for (Map.Entry<String, Long> entry : nextRetransmissionTime.entrySet()) {
-            String messageId = entry.getKey();
-            long nextTime = entry.getValue();
-
-            if (now >= nextTime) {
-                int retries = retransmissionCounts.get(messageId).incrementAndGet();
-                if (retries > MAX_RETRANSMISSIONS) {
-                    System.err.println("Process " + processId + " reached max retransmissions for message " + messageId);
-                    nextRetransmissionTime.remove(messageId);
-                    retransmissionCounts.remove(messageId);
-                    continue;
-                }
-
-                Message message = ackTracker.getPendingMessage(messageId); // Fetch the pending message
-                if (message != null) {
-                    toRetransmit.add(message);
-                    nextRetransmissionTime.put(messageId, now + (BASE_RETRANSMISSION_INTERVAL * (1L << (retries - 1))));
-                }
-            }
-        }
-
-        // Retransmit the identified messages
-        for (Message message : toRetransmit) {
-            for (Host host : hosts) {
-                try {
-                    networkSimulator.send(message, host.getAddress(), host.getPort());
-                    //System.out.println("Process " + processId + " retransmitted message " + message.getId() + " to " + host.getAddress() + ":" + host.getPort());
-                } catch (Exception e) {
-                    System.err.println("Error retransmitting message " + message.getId() + ": " + e.getMessage());
-                }
-            }
-        }
+    private void decide(Message message) throws IOException {
+        decisionSet.addAll(message.getProposalSet());
+        ackTracker.removeMessage(message.getId());
+        writeDecision();
     }
 
     private void deliverMessages() throws IOException {
         List<Message> deliverable = fifoBuffer.getDeliverableMessages();
         for (Message message : deliverable) {
             writeToOutput("d " + message.getSenderId() + " " + message.getSeqNo());
-            //System.out.println("Process " + processId + " delivered message " + message.getId());
         }
+    }
+
+    private void broadcast(Message message) throws IOException {
+        for (Host host : hosts) {
+            networkSimulator.send(message, host.getAddress(), host.getPort());
+        }
+        writeToOutput("b " + message.getSeqNo());
     }
 
     private synchronized void writeToOutput(String log) throws IOException {
@@ -175,8 +151,13 @@ public class Process {
         writer.flush();
     }
 
+    private synchronized void writeDecision() throws IOException {
+        writer.write("Decision: " + decisionSet + "\n");
+        writer.flush();
+    }
+
     public void shutdown() throws IOException {
-        retransmissionTimer.cancel();
+        retryTimer.cancel();
         writer.close();
     }
 }

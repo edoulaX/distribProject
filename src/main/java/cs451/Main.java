@@ -1,7 +1,5 @@
 package cs451;
 
-import cs451.Process;
-
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -22,16 +20,13 @@ public class Main {
         // Load configuration
         List<Host> hosts = loadHosts(hostsFile);
         int totalProcesses = hosts.size();
-        int m = loadConfig(configFile); // Number of messages to broadcast
-
-        //System.out.println("Total processes: " + totalProcesses);
-        //System.out.println("Number of messages: " + m);
+        List<Set<Integer>> proposals = loadConfig(configFile);
 
         // Get process details
         Host myHost = hosts.get(id - 1); // IDs are 1-based
 
         // Initialize and start the process
-        Process process = new Process(id, totalProcesses, myHost, hosts, outputFile, m);
+        Process process = new Process(id, totalProcesses, myHost, hosts, outputFile, proposals);
         process.start();
     }
 
@@ -41,16 +36,28 @@ public class Main {
         for (String line : lines) {
             String[] parts = line.split(" ");
             int id = Integer.parseInt(parts[0]);
-            String host = parts[1];
+            String address = parts[1];
             int port = Integer.parseInt(parts[2]);
-            hosts.add(new Host(id, host, port));
+            hosts.add(new Host(id, address, port));
         }
         return hosts;
     }
 
-    private static int loadConfig(String configFile) throws IOException {
+    private static List<Set<Integer>> loadConfig(String configFile) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(configFile));
-        return Integer.parseInt(lines.get(0).trim());
+        String[] header = lines.get(0).split(" ");
+        int p = Integer.parseInt(header[0]); // Number of proposals per process
+
+        List<Set<Integer>> proposals = new ArrayList<>();
+        for (int i = 1; i <= p; i++) {
+            String[] elements = lines.get(i).split(" ");
+            Set<Integer> proposal = new HashSet<>();
+            for (String element : elements) {
+                proposal.add(Integer.parseInt(element));
+            }
+            proposals.add(proposal);
+        }
+
+        return proposals;
     }
 }
-
