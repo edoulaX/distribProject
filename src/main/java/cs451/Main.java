@@ -1,5 +1,7 @@
 package cs451;
 
+import cs451.Process;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -20,13 +22,13 @@ public class Main {
         // Load configuration
         List<Host> hosts = loadHosts(hostsFile);
         int totalProcesses = hosts.size();
-        List<Set<Integer>> proposals = loadConfig(configFile);
+        ConfigData configData = loadConfig(configFile); // Load lattice configuration
 
         // Get process details
         Host myHost = hosts.get(id - 1); // IDs are 1-based
 
         // Initialize and start the process
-        Process process = new Process(id, totalProcesses, myHost, hosts, outputFile, proposals);
+        Process process = new Process(id, totalProcesses, myHost, hosts, outputFile, configData);
         process.start();
     }
 
@@ -36,28 +38,30 @@ public class Main {
         for (String line : lines) {
             String[] parts = line.split(" ");
             int id = Integer.parseInt(parts[0]);
-            String address = parts[1];
+            String host = parts[1];
             int port = Integer.parseInt(parts[2]);
-            hosts.add(new Host(id, address, port));
+            hosts.add(new Host(id, host, port));
         }
         return hosts;
     }
 
-    private static List<Set<Integer>> loadConfig(String configFile) throws IOException {
+    private static ConfigData loadConfig(String configFile) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(configFile));
-        String[] header = lines.get(0).split(" ");
-        int p = Integer.parseInt(header[0]); // Number of proposals per process
+        String[] firstLine = lines.get(0).split(" ");
+        int proposalsPerProcess = Integer.parseInt(firstLine[0]);
+        int maxElementsPerProposal = Integer.parseInt(firstLine[1]);
+        int maxDistinctElements = Integer.parseInt(firstLine[2]);
 
         List<Set<Integer>> proposals = new ArrayList<>();
-        for (int i = 1; i <= p; i++) {
-            String[] elements = lines.get(i).split(" ");
+        for (int i = 1; i <= proposalsPerProcess; i++) {
+            String[] proposalLine = lines.get(i).split(" ");
             Set<Integer> proposal = new HashSet<>();
-            for (String element : elements) {
+            for (String element : proposalLine) {
                 proposal.add(Integer.parseInt(element));
             }
             proposals.add(proposal);
         }
 
-        return proposals;
+        return new ConfigData(proposalsPerProcess, maxElementsPerProposal, maxDistinctElements, proposals);
     }
 }

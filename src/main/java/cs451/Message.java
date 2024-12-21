@@ -4,34 +4,36 @@ import java.io.*;
 import java.util.*;
 
 public class Message implements Serializable {
-    private final int senderId;
-    private final int seqNo;
-    private final String content;
-    private final boolean isAck;
-    private final Set<Integer> proposalSet; // New field for proposals or decisions
-    private final boolean isNoAck; // New field for NoAck messages
+    private final int senderId; // Current sender's ID
+    private final int seqNo; // Sequence number of the message
+    private final int originalSenderId; // Original sender's ID
+    private final String content; // Message content
+    private final boolean isAck; // Is this an acknowledgment message?
+    private final Set<Integer> ackList; // List of processes that have acknowledged this message
+    private final Set<Integer> latticeState; // Represents the lattice state
 
-    // Constructor with proposalSet and NoAck flag
-    public Message(int senderId, int seqNo, String content, boolean isAck, Set<Integer> proposalSet, boolean isNoAck) {
+    // Constructor for normal messages
+    public Message(int senderId, int seqNo, int originalSenderId, String content, boolean isAck, Set<Integer> ackList, Set<Integer> latticeState) {
         this.senderId = senderId;
         this.seqNo = seqNo;
+        this.originalSenderId = originalSenderId;
         this.content = content;
         this.isAck = isAck;
-        this.isNoAck = isNoAck;
-        this.proposalSet = proposalSet == null ? new HashSet<>() : new HashSet<>(proposalSet);
+        this.ackList = Collections.unmodifiableSet(new HashSet<>(ackList)); // Immutable set
+        this.latticeState = Collections.unmodifiableSet(new HashSet<>(latticeState)); // Immutable set
     }
 
-    // Simplified constructor for non-lattice messages
-    public Message(int senderId, int seqNo, String content, boolean isAck) {
-        this(senderId, seqNo, content, isAck, null, false);
-    }
-
+    // Getters
     public int getSenderId() {
         return senderId;
     }
 
     public int getSeqNo() {
         return seqNo;
+    }
+
+    public int getOriginalSenderId() {
+        return originalSenderId;
     }
 
     public String getContent() {
@@ -42,18 +44,19 @@ public class Message implements Serializable {
         return isAck;
     }
 
-    public boolean isNoAck() {
-        return isNoAck;
+    public Set<Integer> getAckList() {
+        return ackList; // Return the immutable set
     }
 
-    public Set<Integer> getProposalSet() {
-        return Collections.unmodifiableSet(proposalSet);
+    public Set<Integer> getLatticeState() {
+        return latticeState;
     }
 
     public String getId() {
-        return senderId + "-" + seqNo;
+        return originalSenderId + "-" + seqNo; // Unique ID based on original sender and sequence number
     }
 
+    // Serialization
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(bos);
@@ -68,23 +71,41 @@ public class Message implements Serializable {
         return (Message) in.readObject();
     }
 
-    public static Message createAck(int senderId, int seqNo) {
-        return new Message(senderId, seqNo, null, true, null, false);
+    // Factory method for acknowledgment messages
+    public static Message createAck(int senderId, int seqNo, int originalSenderId, Set<Integer> ackList) {
+        return new Message(senderId, seqNo, originalSenderId, null, true, ackList, new HashSet<>());
     }
 
-    public static Message createNoAck(int senderId, int seqNo, Set<Integer> proposalSet) {
-        return new Message(senderId, seqNo, null, false, proposalSet, true);
+    // Factory method to create a new message with an updated acknowledgment list
+    public static Message withUpdatedAckList(Message message, Set<Integer> updatedAckList) {
+        return new Message(
+                message.getSenderId(),
+                message.getSeqNo(),
+                message.getOriginalSenderId(),
+                message.getContent(),
+                message.isAck(),
+                updatedAckList,
+                message.getLatticeState()
+        );
     }
 
-    @Override
-    public String toString() {
-        return "Message{" +
-                "senderId=" + senderId +
-                ", seqNo=" + seqNo +
-                ", content='" + content + '\'' +
-                ", isAck=" + isAck +
-                ", isNoAck=" + isNoAck +
-                ", proposalSet=" + proposalSet +
-                '}';
+    // Factory method to merge lattice states
+    public static Message withMergedLatticeState(Message message, Set<Integer> updatedLatticeState) {
+        Set<Integer> mergedState = new HashSet<>(message.getLatticeState());
+        mergedState.addAll(updatedLatticeState);
+        return new Message(
+                message.getSenderId(),
+                message.getSeqNo(),
+                message.getOriginalSenderId(),
+                message.getContent(),
+                message.isAck(),
+                message.getAckList(),
+                mergedState
+        );
+    }
+
+    // Utility method to create a new message with an updated lattice state
+    public static Message createLatticeMessage(int senderId, int seqNo, int originalSenderId, String content, Set<Integer> latticeState) {
+        return new Message(senderId, seqNo, originalSenderId, content, false, new HashSet<>(), latticeState);
     }
 }
