@@ -15,73 +15,58 @@ public class Process {
     private final NetworkSimulator networkSimulator;
     private final DatagramSocket socket;
     private final BufferedWriter writer;
-    private final Timer retransmissionTimer = new Timer(true);
-    private long retransmissionInterval = 500; // Initial interval (1 second)
-    private static final int MIN_RETRANSMISSION_INTERVAL = 100;
-    private static final int MAX_RETRANSMISSION_INTERVAL = 1000;
-
-    private final Map<Integer, Integer> failedAttempts = new ConcurrentHashMap<>();
-    private final Set<Integer> suspectedCrashes = ConcurrentHashMap.newKeySet();
-    private static final int CRASH_THRESHOLD = 5; // Max failed attempts before marking as crashed
-
-    private Set<Integer> currentLatticeState = ConcurrentHashMap.newKeySet();
+    private final Timer retryTimer = new Timer(true);
+    private final int numberOfProposals;
+    // TODO: make everything concurrent
     private final List<Set<Integer>> proposals;
+    private final List<Integer> proposalNb; // (ProposalId -> ProposalNb)
+    private final List<Boolean> decided; // (ProposalId -> Decided (True: decided; False: not decided)
+    private int currentId;
 
-    public Process(int processId, int totalProcesses, Host myHost, List<Host> hosts, String outputFile, ConfigData configData)
-            throws IOException {
+    private static final int MAX_RETRIES = 5;
+    private static final long RETRY_INTERVAL = 1000;
+
+    public Process(int processId, int totalProcesses, Host myHost, List<Host> hosts, String outputFile, List<Set<Integer>> proposals) throws IOException {
         this.processId = processId;
         this.totalProcesses = totalProcesses;
         this.myHost = myHost;
         this.hosts = hosts;
-        this.ackTracker = new AckTracker(totalProcesses, processId, configData.getMaxDistinctElements());
+        this.ackTracker = new AckTracker();
         this.fifoBuffer = new FIFOBuffer(totalProcesses);
         this.networkSimulator = new NetworkSimulator();
         this.socket = new DatagramSocket(myHost.getPort());
+        this.proposals = proposals;
+        this.numberOfProposals = proposals.size();
+        // TODO initialize proposalNb and decided to 0 for each index
+        this.proposalNb = new ArrayList<>();
+        this.decided = new ArrayList<>();
         this.writer = new BufferedWriter(new FileWriter(outputFile));
 
-        // Initialize lattice state and proposals
-        this.proposals = configData.getProposals();
-        for (Set<Integer> proposal : proposals) {
-            currentLatticeState.addAll(proposal);
-        }
+        this.currentId = 0;
 
-        // Schedule crash retry task
-        new Timer(true).schedule(new TimerTask() {
-            @Override
-            public void run() {
-                retrySuspectedCrashes();
-            }
-        }, 0, 5000); // Retry every 5 seconds
     }
 
     public void start() throws IOException {
-        // Start listening for incoming messages
         new Thread(this::listen).start();
 
-        // Broadcast initial proposals
-        int seqNo = 1;
-        for (Set<Integer> proposal : proposals) {
-            Message message = Message.createLatticeMessage(
-                    processId, seqNo++, processId, proposal.toString(), proposal
-            );
-            fifoBuffer.addMessage(message);
-            ackTracker.trackMessage(message);
-            broadcast(message);
+        for (int id = 0; id < proposals.size(); id++) {
+            propose(id);
+            ackTracker.addAck(id, processId);
         }
 
-        // Schedule retransmission task
-        retransmissionTimer.schedule(new TimerTask() {
+        retryTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                retransmitUninformed();
+                //TODO
+                retryProposals();
             }
-        }, 0, retransmissionInterval);
+        }, 0, RETRY_INTERVAL);
     }
 
     private void listen() {
         try {
             while (true) {
-                byte[] buffer = new byte[2048];
+                byte[] buffer = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
 
@@ -93,138 +78,116 @@ public class Process {
             e.printStackTrace();
         }
     }
-
     private void handleMessage(Message message) throws IOException {
-        if (message.isAck()) {
-            ackTracker.addAck(message.getId(), message.getSenderId());
+        switch (message.getType()) {
+            case ACK:
+                handleAck(message);
+                break;
+
+            case NACK:
+                handleNack(message);
+                break;
+
+            case PROPOSAL:
+                handleProposition(message);
+                break;
+        }
+        int receiveProposalId = message.getProposalId();
+        decide(receiveProposalId);
+        if(ackTracker.canPropose(receiveProposalId)){
+            propose(receiveProposalId);
+        }
+    }
+
+    private void handleAck(Message message) throws IOException {
+        int receiveProposalId = message.getProposalId();
+        int receivedProposalNb = message.getProposalNb();
+        if ( !(proposalNb.get(receiveProposalId) == receivedProposalNb) || decided.get(receiveProposalId) ){
+            return;
+        }
+        ackTracker.addAck(receiveProposalId, message.getSenderId());
+    }
+
+    private void handleNack(Message message) throws IOException {
+        int receiveProposalId = message.getProposalId();
+        int receivedProposalNb = message.getProposalNb();
+        if ( !(proposalNb.get(receiveProposalId) == receivedProposalNb) || decided.get(receiveProposalId) ){
+            return;
+        }
+        ackTracker.addNoAck(receiveProposalId, message.getSenderId());
+
+        Set<Integer> proposedValues = message.getProposalSet();
+        proposals.get(receiveProposalId).addAll(proposedValues);
+    }
+
+    private void handleProposition(Message message) throws IOException {
+        int proposalId = message.getProposalId();
+        int proposalNb = message.getProposalNb();
+        int senderId = message.getSenderId();
+        Set<Integer> receivedProposedValues = message.getProposalSet();
+        Set<Integer> currentProposal = proposals.get(proposalId);
+        if( receivedProposedValues.containsAll(currentProposal) ){
+            currentProposal.addAll(proposedValues);
+            sendAck(senderId, proposalId, proposalNb);
         } else {
-            if (!fifoBuffer.isDuplicate(message)) {
-                fifoBuffer.addMessage(message);
-                ackTracker.trackMessage(message);
-                sendAcknowledgment(message);
-            } else {
-                // Handle duplicate message by updating acknowledgment and lattice state
-                ackTracker.trackMessage(message);
-                sendAcknowledgment(message);
-            }
-
-            // Merge lattice state
-            currentLatticeState.addAll(message.getLatticeState());
+            currentProposal.addAll(proposedValues);
+            sendNoAck(senderId, proposalId, proposalNb, currentProposal);
         }
-
-        deliverMessages();
+        proposals.set(proposalId, currentProposal);
     }
 
-    private void deliverMessages() throws IOException {
-        List<Message> deliverable = fifoBuffer.getDeliverableMessages(ackTracker, processId);
-
-        if (!deliverable.isEmpty()) {
-            int size = deliverable.size();
-            StringBuilder batchOutput = new StringBuilder();
-            for (int i = 0; i < size; i++) {
-                Message message = deliverable.get(i);
-                message.getLatticeState().forEach(x -> batchOutput.append(x).append(" "));
-                //batchOutput.append("d ").append(message.getOriginalSenderId()).append(" ").append(message.getLatticeState());
-                if (i < size - 1) {
-                    batchOutput.append("\n"); // Add newline only between messages
-                }
-            }
-            writeToOutput(batchOutput.toString());
+    private void decide(int id) throws IOException {
+        if ( !ackTracker.canDecide(id) ){
+            return;
         }
+        decided.set(id, true);
+        ackTracker.removeMessage(id);
+        writeDecision();
     }
 
-    private void retransmitUninformed() {
+    private void propose(int id){
+        int newProposalNb = proposalNb.get(id) + 1;
+        proposalNb.set(id, newProposalNb);
+        Message message = Message.createProposal(processId, id, proposals.get(id), newProposalNb);
+        ackTracker.reset(processId); // reset ack and nack count without getting rid of the self ack
+        send(message);
+    }
+
+
+    private void retryProposals() {
+        // TODO, from the acktracker get the list of hosts that did not send an ack or nack and send them again the proposal
+
+    }
+
+    private void sendAck(int senderId, int proposalId, int proposalNb) throws IOException {
+        Message message = Message.createAck(processId, proposalId, proposalNb);
+        send(message, senderId);
+    }
+
+    private void sendNoAck(int senderId, int proposalId, int proposalNb, Set<Integer> proposalSet) throws IOException {
+        Message message = Message.createNoAck(processId, proposalId, proposalNb, proposalSet);
+        send(message, senderId);
+    }
+
+    private void send(Message message, int senderId) {
         try {
-            List<Message> toBroadcast = ackTracker.getMessagesForUninformed(processId);
-
-            // Adjust retransmission interval dynamically
-            int pendingMessages = toBroadcast.size();
-            if (pendingMessages > totalProcesses * 2) { // High traffic
-                retransmissionInterval = Math.max(MIN_RETRANSMISSION_INTERVAL, retransmissionInterval / 2);
-            } else if (pendingMessages == 0) { // No pending messages
-                retransmissionInterval = Math.min(MAX_RETRANSMISSION_INTERVAL, retransmissionInterval + 100);
-            }
-
-            // Send messages to uninformed processes
-            for (Message message : toBroadcast) {
-                sendToUninformed(message);
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error during retransmission in process " + processId + ": " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            // Reschedule retransmission with updated interval
-            retransmissionTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    retransmitUninformed();
-                }
-            }, retransmissionInterval);
-        }
-    }
-
-    private void broadcast(Message message) throws IOException {
-        //writeToOutput("b " + message.getSeqNo());
-        sendToUninformed(message);
-    }
-
-    private void sendAcknowledgment(Message message) {
-        try {
-            Message ack = Message.createAck(processId, message.getSeqNo(), message.getOriginalSenderId(), new HashSet<>(Collections.singleton(processId)));
-            Host host = hosts.get(message.getSenderId() - 1);
-            networkSimulator.send(ack, host.getAddress(), host.getPort());
+            Host host = hosts.get(senderId - 1);
+            networkSimulator.send(message, host.getAddress(), host.getPort());
         } catch (Exception e) {
             System.err.println("Error sending acknowledgment for message " + message.getId() + ": " + e.getMessage());
         }
     }
 
-    private void sendToUninformed(Message message) {
-        Set<Integer> informedProcesses = message.getAckList();
-
-        for (int i = 1; i <= totalProcesses; i++) {
-            if (suspectedCrashes.contains(i) || informedProcesses.contains(i)) {
-                continue; // Skip crashed or already informed processes
-            }
-
-            Host host = hosts.get(i - 1);
-            try {
-                if (!ackTracker.isFullyAcknowledged(message.getId())) {
-                    networkSimulator.send(message, host.getAddress(), host.getPort());
-                    failedAttempts.put(i, 0); // Reset failed attempts on success
-                }
-            } catch (Exception e) {
-                // Increment failure count
-                failedAttempts.put(i, failedAttempts.getOrDefault(i, 0) + 1);
-
-                // Mark process as crashed if threshold exceeded
-                if (failedAttempts.get(i) >= CRASH_THRESHOLD) {
-                    suspectedCrashes.add(i);
-                    System.err.println("Process " + i + " suspected as crashed.");
-                }
-            }
+    private synchronized void writeDecision() throws IOException {
+        while (decided.get(currentId)){
+            writer.write(proposals.get(currentId) + "\n");
+            currentId++;
         }
-    }
-
-    private void retrySuspectedCrashes() {
-        Iterator<Integer> iterator = suspectedCrashes.iterator();
-        while (iterator.hasNext()) {
-            int processId = iterator.next();
-            if (failedAttempts.getOrDefault(processId, 0) < CRASH_THRESHOLD) {
-                iterator.remove(); // Remove from suspected crashes
-                System.out.println("Process " + processId + " removed from suspected crashes.");
-            }
-        }
-    }
-
-    private synchronized void writeToOutput(String log) throws IOException {
-        writer.write(log + "\n");
         writer.flush();
     }
 
     public void shutdown() throws IOException {
-        retransmissionTimer.cancel();
+        retryTimer.cancel();
         writer.close();
-        socket.close();
     }
 }
