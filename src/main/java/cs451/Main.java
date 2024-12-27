@@ -28,7 +28,7 @@ public class Main {
         Host myHost = hosts.get(id - 1); // IDs are 1-based
 
         // Initialize and start the process
-        Process process = new Process(id, totalProcesses, myHost, hosts, outputFile, configData);
+        Process process = new Process(id, totalProcesses, myHost, hosts, outputFile, configData.getProposals());
         process.start();
     }
 

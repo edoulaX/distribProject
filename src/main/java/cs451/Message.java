@@ -4,108 +4,127 @@ import java.io.*;
 import java.util.*;
 
 public class Message implements Serializable {
-    private final int senderId; // Current sender's ID
-    private final int seqNo; // Sequence number of the message
-    private final int originalSenderId; // Original sender's ID
-    private final String content; // Message content
-    private final boolean isAck; // Is this an acknowledgment message?
-    private final Set<Integer> ackList; // List of processes that have acknowledged this message
-    private final Set<Integer> latticeState; // Represents the lattice state
+    public enum MessageType {
+        PROPOSAL,
+        ACK,
+        NACK
+    }
 
-    // Constructor for normal messages
-    public Message(int senderId, int seqNo, int originalSenderId, String content, boolean isAck, Set<Integer> ackList, Set<Integer> latticeState) {
+    private final MessageType type;
+    private final int senderId;
+    private final int proposalId;
+    private final int proposalNb;
+    private final Set<Integer> proposalSet;
+
+    // Constructor
+    private Message(MessageType type, int senderId, int proposalId, int proposalNb, Set<Integer> proposalSet) {
+        if (type == null) {
+            throw new IllegalArgumentException("Message type cannot be null");
+        }
+        if (senderId <= 0) {
+            throw new IllegalArgumentException("Sender ID must be positive");
+        }
+        if (proposalId < 0) {
+            throw new IllegalArgumentException("Proposal ID cannot be negative");
+        }
+        if (proposalNb < 0) {
+            throw new IllegalArgumentException("Proposal number cannot be negative");
+        }
+        if ((type == MessageType.PROPOSAL || type == MessageType.NACK) && (proposalSet == null || proposalSet.isEmpty())) {
+            throw new IllegalArgumentException("Proposal set cannot be null or empty for PROPOSAL or NACK messages");
+        }
+
+        this.type = type;
         this.senderId = senderId;
-        this.seqNo = seqNo;
-        this.originalSenderId = originalSenderId;
-        this.content = content;
-        this.isAck = isAck;
-        this.ackList = Collections.unmodifiableSet(new HashSet<>(ackList)); // Immutable set
-        this.latticeState = Collections.unmodifiableSet(new HashSet<>(latticeState)); // Immutable set
+        this.proposalId = proposalId;
+        this.proposalNb = proposalNb;
+        this.proposalSet = proposalSet != null ? new HashSet<>(proposalSet) : null;
+    }
+
+    // Static factory methods with validation
+    public static Message createProposal(int senderId, int proposalId, Set<Integer> proposalSet, int proposalNb) {
+        return new Message(MessageType.PROPOSAL, senderId, proposalId, proposalNb, proposalSet);
+    }
+
+    public static Message createAck(int senderId, int proposalId, int proposalNb) {
+        return new Message(MessageType.ACK, senderId, proposalId, proposalNb, null);
+    }
+
+    public static Message createNoAck(int senderId, int proposalId, int proposalNb, Set<Integer> proposalSet) {
+        return new Message(MessageType.NACK, senderId, proposalId, proposalNb, proposalSet);
     }
 
     // Getters
+    public MessageType getType() {
+        return type;
+    }
+
     public int getSenderId() {
         return senderId;
     }
 
-    public int getSeqNo() {
-        return seqNo;
+    public int getProposalId() {
+        return proposalId;
     }
 
-    public int getOriginalSenderId() {
-        return originalSenderId;
+    public int getProposalNb() {
+        return proposalNb;
     }
 
-    public String getContent() {
-        return content;
+    public Set<Integer> getProposalSet() {
+        return proposalSet != null ? new HashSet<>(proposalSet) : null;
     }
 
-    public boolean isAck() {
-        return isAck;
-    }
-
-    public Set<Integer> getAckList() {
-        return ackList; // Return the immutable set
-    }
-
-    public Set<Integer> getLatticeState() {
-        return latticeState;
-    }
-
-    public String getId() {
-        return originalSenderId + "-" + seqNo; // Unique ID based on original sender and sequence number
-    }
-
-    // Serialization
+    // Serialization to byte array (custom serialization for efficiency)
     public byte[] toBytes() throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bos);
-        out.writeObject(this);
-        out.flush();
-        return bos.toByteArray();
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        try (DataOutputStream dataStream = new DataOutputStream(byteStream)) {
+            dataStream.writeInt(type.ordinal()); // Serialize MessageType as an integer
+            dataStream.writeInt(senderId);
+            dataStream.writeInt(proposalId);
+            dataStream.writeInt(proposalNb);
+
+            // Serialize proposalSet
+            if (proposalSet != null) {
+                dataStream.writeInt(proposalSet.size());
+                for (int value : proposalSet) {
+                    dataStream.writeInt(value);
+                }
+            } else {
+                dataStream.writeInt(0); // Indicate empty set
+            }
+        }
+        return byteStream.toByteArray();
     }
 
-    public static Message fromBytes(byte[] data) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bis = new ByteArrayInputStream(data);
-        ObjectInputStream in = new ObjectInputStream(bis);
-        return (Message) in.readObject();
+    // Deserialization from byte array (custom deserialization for efficiency)
+    public static Message fromBytes(byte[] bytes) throws IOException {
+        ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
+        try (DataInputStream dataStream = new DataInputStream(byteStream)) {
+            MessageType type = MessageType.values()[dataStream.readInt()];
+            int senderId = dataStream.readInt();
+            int proposalId = dataStream.readInt();
+            int proposalNb = dataStream.readInt();
+
+            // Deserialize proposalSet
+            int setSize = dataStream.readInt();
+            Set<Integer> proposalSet = new HashSet<>();
+            for (int i = 0; i < setSize; i++) {
+                proposalSet.add(dataStream.readInt());
+            }
+
+            return new Message(type, senderId, proposalId, proposalNb, proposalSet.isEmpty() ? null : proposalSet);
+        }
     }
 
-    // Factory method for acknowledgment messages
-    public static Message createAck(int senderId, int seqNo, int originalSenderId, Set<Integer> ackList) {
-        return new Message(senderId, seqNo, originalSenderId, null, true, ackList, new HashSet<>());
-    }
-
-    // Factory method to create a new message with an updated acknowledgment list
-    public static Message withUpdatedAckList(Message message, Set<Integer> updatedAckList) {
-        return new Message(
-                message.getSenderId(),
-                message.getSeqNo(),
-                message.getOriginalSenderId(),
-                message.getContent(),
-                message.isAck(),
-                updatedAckList,
-                message.getLatticeState()
-        );
-    }
-
-    // Factory method to merge lattice states
-    public static Message withMergedLatticeState(Message message, Set<Integer> updatedLatticeState) {
-        Set<Integer> mergedState = new HashSet<>(message.getLatticeState());
-        mergedState.addAll(updatedLatticeState);
-        return new Message(
-                message.getSenderId(),
-                message.getSeqNo(),
-                message.getOriginalSenderId(),
-                message.getContent(),
-                message.isAck(),
-                message.getAckList(),
-                mergedState
-        );
-    }
-
-    // Utility method to create a new message with an updated lattice state
-    public static Message createLatticeMessage(int senderId, int seqNo, int originalSenderId, String content, Set<Integer> latticeState) {
-        return new Message(senderId, seqNo, originalSenderId, content, false, new HashSet<>(), latticeState);
+    @Override
+    public String toString() {
+        return "Message{" +
+                "type=" + type +
+                ", senderId=" + senderId +
+                ", proposalId=" + proposalId +
+                ", proposalNb=" + proposalNb +
+                ", proposalSet=" + proposalSet +
+                '}';
     }
 }
